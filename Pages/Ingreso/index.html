@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Carpooling</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./ingreso.css" />
+    <link rel="stylesheet" href="../../css/style.css" />
+  </head>
+
+  <body>
+    <header class="bg-dark text-white py-4 px-4">
+      <h1>RideShare</h1>
+    </header>
+
+    <main class="container my-5">
+      <section
+        class="mx-auto shadow p-4 rounded bg-white"
+        style="max-width: 600px"
+      >
+        <div class="d-flex justify-content-center mb-4">
+          <a
+            href="#"
+            id="login-box-link"
+            class="me-4 fw-bold active text-decoration-none"
+            >Iniciar Sesión</a
+          >
+          <a href="#" id="signup-box-link" class="fw-bold text-decoration-none"
+            >Registrarse</a
+          >
+        </div>
+
+        <form id="loginForm" class="email-login row g-3">
+          <div class="col-12">
+            <label class="form-label">Correo</label>
+            <input
+              type="email"
+              class="form-control"
+              placeholder="correo@email.com"
+              required
+            />
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Contraseña</label>
+            <input
+              type="password"
+              class="form-control"
+              placeholder="********"
+              required
+            />
+          </div>
+
+          <div class="col-12 text-center">
+            <button class="btn-ride primary w-50">Iniciar Sesión</button>
+          </div>
+        </form>
+
+        <form id="signupForm" class="email-signup row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" required />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Apellidos</label>
+            <input type="text" class="form-control" required />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Teléfono</label>
+            <input type="text" class="form-control" required />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Correo</label>
+            <input type="email" class="form-control" required />
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Contraseña</label>
+            <input
+              type="password"
+              class="form-control"
+              placeholder="********"
+              required
+            />
+          </div>
+
+          <div class="col-12 text-center">
+            <button class="btn-ride primary w-50">Registrarme</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <script src="./ingreso.js"></script>
+  </body>
+</html>

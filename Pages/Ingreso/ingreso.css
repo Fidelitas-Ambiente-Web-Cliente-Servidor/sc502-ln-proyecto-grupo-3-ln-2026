@@ -1,0 +1,58 @@
+#login-box-link,
+#signup-box-link {
+  color: #6c757d;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.active {
+  color: #000 !important;
+  font-size: 18px;
+}
+
+/* Formularios */
+
+.email-login,
+.email-signup {
+  width: 100%;
+  transition: all 0.25s ease;
+}
+
+/* Inputs */
+
+.form-control {
+  height: 45px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: 0.2s;
+}
+
+.form-control:focus {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.15rem rgba(25, 135, 84, 0.25);
+}
+
+/* Animación suave */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .form-section {
+    padding: 25px;
+  }
+
+  .btn {
+    width: 100% !important;
+  }
+}
