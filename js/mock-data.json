@@ -1,0 +1,23 @@
+[
+  {
+    "destination": "San Jose",
+    "driver": "John Doe",
+    "date": "2026-03-10",
+    "time": "09:00 AM",
+    "seatsAvailable": 3
+  },
+  {
+    "destination": "Alajuela",
+    "driver": "Jane Smith",
+    "date": "2026-03-11",
+    "time": "02:00 PM",
+    "seatsAvailable": 2
+  },
+  {
+    "destination": "Heredia",
+    "driver": "Carlos Lopez",
+    "date": "2026-03-12",
+    "time": "08:00 AM",
+    "seatsAvailable": 4
+  }
+]
