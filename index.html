@@ -23,94 +23,7 @@
       <p>Comparte tu ruta, ahorra dinero y ayuda al medio ambiente</p>
     </header>
 
-    <main class="container my-5">
-      <section
-        class="form-section mx-auto shadow p-4 rounded bg-white"
-        style="max-width: 800px"
-      >
-        <h2 class="text-center mb-4">Publicar un nuevo viaje</h2>
-
-        <div id="formMessages" class="col-12"></div>
-
-        <form id="viajeForm" class="row g-3" novalidate>
-          <div class="col-md-6">
-            <label for="origen" class="form-label">Punto de Salida</label>
-            <input
-              type="text"
-              class="form-control"
-              id="origen"
-              placeholder="---Origen---"
-              required
-            />
-          </div>
-          <div class="col-md-6">
-            <label for="destino" class="form-label">Destino</label>
-            <input
-              type="text"
-              class="form-control"
-              id="destino"
-              placeholder="---Destino---"
-              required
-            />
-          </div>
-
-          <div class="col-md-6">
-            <label for="fecha" class="form-label">Fecha del viaje</label>
-            <input type="date" class="form-control" id="fecha" required />
-          </div>
-          <div class="col-md-6">
-            <label for="hora" class="form-label">Hora de salida</label>
-            <input type="time" class="form-control" id="hora" required />
-          </div>
-
-          <div class="col-md-6">
-            <label for="espacios" class="form-label"
-              >Espacios disponibles</label
-            >
-            <input
-              type="number"
-              class="form-control"
-              id="espacios"
-              min="1"
-              max="6"
-              placeholder="--- # de espacios ---"
-              required
-            />
-          </div>
-          <div class="col-md-6">
-            <label for="precio" class="form-label"
-              >Precio por pasajero (CRC)</label
-            >
-            <input
-              type="number"
-              class="form-control"
-              id="precio"
-              min="0"
-              placeholder="--- Precio ---"
-              required
-            />
-          </div>
-
-          <div class="col-12">
-            <label for="comentarios" class="form-label"
-              >Detalles adicionales (Opcional)</label
-            >
-            <textarea
-              class="form-control"
-              id="comentarios"
-              rows="2"
-              placeholder="--- Comentarios ---"
-            ></textarea>
-          </div>
-
-          <div class="col-12 text-center mt-4">
-            <button type="submit" class="btn primary" id="btnPublicar">
-              Publicar Viaje
-            </button>
-          </div>
-        </form>
-      </section>
-
+    <main class="container my-5 flex-grow">
       <!-- Filtro de viajes disponibles -->
 
       <div class="wrapper">
@@ -136,9 +49,13 @@
         </section>
 
         <section class="btnWrapper">
-          <button type="submit" class="btn-ride primary" id="btnPublicar">
+          <a
+            href="./Pages/CrearViaje/index.html"
+            class="btn-ride primary"
+            id="btnPublicar"
+          >
             Publicar ride
-          </button>
+          </a>
           <button type="submit" class="btn-ride secondary" id="btnPublicar">
             Mis rides
           </button>
