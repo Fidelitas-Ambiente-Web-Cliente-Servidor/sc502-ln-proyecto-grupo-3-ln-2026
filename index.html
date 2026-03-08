@@ -1,69 +1,166 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Publicar Viaje - Carpooling</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/style.css">
-</head>
-<body>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
     <header class="bg-dark text-white text-center py-4">
-        <h1>Carpooling App</h1>
-        <p>Comparte tu ruta, ahorra dinero y ayuda al medio ambiente</p>
+      <h1>RideShare</h1>
+      <p>Comparte tu ruta, ahorra dinero y ayuda al medio ambiente</p>
     </header>
 
     <main class="container my-5">
-        <section class="form-section mx-auto shadow p-4 rounded bg-white" style="max-width: 800px;">
-            <h2 class="text-center mb-4">Publicar un nuevo viaje</h2>
-            
-            <div id="formMessages" class="col-12"></div>
+      <section
+        class="form-section mx-auto shadow p-4 rounded bg-white"
+        style="max-width: 800px"
+      >
+        <h2 class="text-center mb-4">Publicar un nuevo viaje</h2>
 
-            <form id="viajeForm" class="row g-3" novalidate>
-                <div class="col-md-6">
-                    <label for="origen" class="form-label">Punto de Salida</label>
-                    <input type="text" class="form-control" id="origen" placeholder="---Origen---" required>
-                </div>
-                <div class="col-md-6">
-                    <label for="destino" class="form-label">Destino</label>
-                    <input type="text" class="form-control" id="destino" placeholder="---Destino---" required>
-                </div>
+        <div id="formMessages" class="col-12"></div>
 
-                <div class="col-md-6">
-                    <label for="fecha" class="form-label">Fecha del viaje</label>
-                    <input type="date" class="form-control" id="fecha" required>
-                </div>
-                <div class="col-md-6">
-                    <label for="hora" class="form-label">Hora de salida</label>
-                    <input type="time" class="form-control" id="hora" required>
-                </div>
+        <form id="viajeForm" class="row g-3" novalidate>
+          <div class="col-md-6">
+            <label for="origen" class="form-label">Punto de Salida</label>
+            <input
+              type="text"
+              class="form-control"
+              id="origen"
+              placeholder="---Origen---"
+              required
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="destino" class="form-label">Destino</label>
+            <input
+              type="text"
+              class="form-control"
+              id="destino"
+              placeholder="---Destino---"
+              required
+            />
+          </div>
 
-                <div class="col-md-6">
-                    <label for="espacios" class="form-label">Espacios disponibles</label>
-                    <input type="number" class="form-control" id="espacios" min="1" max="6" placeholder="--- # de espacios ---" required>
-                </div>
-                <div class="col-md-6">
-                    <label for="precio" class="form-label">Precio por pasajero (CRC)</label>
-                    <input type="number" class="form-control" id="precio" min="0" placeholder="--- Precio ---" required>
-                </div>
+          <div class="col-md-6">
+            <label for="fecha" class="form-label">Fecha del viaje</label>
+            <input type="date" class="form-control" id="fecha" required />
+          </div>
+          <div class="col-md-6">
+            <label for="hora" class="form-label">Hora de salida</label>
+            <input type="time" class="form-control" id="hora" required />
+          </div>
 
-                <div class="col-12">
-                    <label for="comentarios" class="form-label">Detalles adicionales (Opcional)</label>
-                    <textarea class="form-control" id="comentarios" rows="2" placeholder="--- Comentarios ---"></textarea>
-                </div>
+          <div class="col-md-6">
+            <label for="espacios" class="form-label"
+              >Espacios disponibles</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="espacios"
+              min="1"
+              max="6"
+              placeholder="--- # de espacios ---"
+              required
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="precio" class="form-label"
+              >Precio por pasajero (CRC)</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="precio"
+              min="0"
+              placeholder="--- Precio ---"
+              required
+            />
+          </div>
 
-                <div class="col-12 text-center mt-4">
-                    <button type="submit" class="btn btn-primary px-5 py-2 fw-bold" id="btnPublicar">Publicar Viaje</button>
-                </div>
-            </form>
+          <div class="col-12">
+            <label for="comentarios" class="form-label"
+              >Detalles adicionales (Opcional)</label
+            >
+            <textarea
+              class="form-control"
+              id="comentarios"
+              rows="2"
+              placeholder="--- Comentarios ---"
+            ></textarea>
+          </div>
+
+          <div class="col-12 text-center mt-4">
+            <button type="submit" class="btn primary" id="btnPublicar">
+              Publicar Viaje
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Filtro de viajes disponibles -->
+
+      <div class="wrapper">
+        <section id="filter">
+          <form id="filterForm" class="filter">
+            <div>
+              <label for="zone" class="form-label">Zona de destino</label>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"
+                  ><i class="bi bi-geo-alt"></i
+                ></span>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Username"
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
+                  id="zone"
+                />
+              </div>
+            </div>
+          </form>
         </section>
+
+        <section class="btnWrapper">
+          <button type="submit" class="btn-ride primary" id="btnPublicar">
+            Publicar ride
+          </button>
+          <button type="submit" class="btn-ride secondary" id="btnPublicar">
+            Mis rides
+          </button>
+        </section>
+      </div>
+
+      <!-- Contenedor para mostrar los viajes disponibles -->
+
+      <section id="trips">
+        <h2>Busca tu Ride</h2>
+        <div class="trip-cards"></div>
+      </section>
     </main>
 
     <footer class="bg-dark text-white text-center py-3 mt-auto">
-        <p>&copy; 2026 Carpooling App - Todos los derechos reservados</p>
+      <p>&copy; 2026 Carpooling App - Todos los derechos reservados</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="./js/script.js"></script>
-</body>
+  </body>
 </html>

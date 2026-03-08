@@ -1,0 +1,76 @@
+.btn-ride {
+  border-radius: 500px;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 0px 8px,
+    rgba(0, 0, 0, 0.04) 0px 4px 4px;
+  border: none;
+  padding: 12px;
+  height: 50px;
+  font-weight: 500;
+}
+
+.primary {
+  background-color: #000000;
+  color: white;
+
+  &:hover {
+    background-color: #333333;
+  }
+}
+
+.secondary {
+  background-color: #f0f0f0;
+  color: #333333;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+}
+
+.trip-cards .card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.trip-cards .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.trip-cards .card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.trip-cards .card-text {
+  font-size: 1rem;
+  color: #555;
+}
+
+.filter {
+  display: flex;
+  gap: 1rem;
+  flex-direction: row;
+}
+
+.buscar {
+  display: flex;
+  align-items: end;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btnWrapper {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
