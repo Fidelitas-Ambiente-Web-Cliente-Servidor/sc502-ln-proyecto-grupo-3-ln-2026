@@ -25,33 +25,33 @@ footer {
 }
 
 form label {
-    font-weight: 600;
-    color: #3c6a70;
+  font-weight: 600;
+  color: #3c6a70;
 }
 
 .form-control:focus {
-    border-color: #4ca1af;
-    box-shadow: 0 0 5px rgba(76, 161, 175, 0.5);
+  border-color: #4ca1af;
+  box-shadow: 0 0 5px rgba(76, 161, 175, 0.5);
 }
 
 .btn-primary {
-    background-color: #4ca1af !important;
-    border: none;
-    transition: all 0.3s ease;
+  background-color: #4ca1af !important;
+  border: none;
+  transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-    background-color: #2c3e50 !important;
-    transform: scale(1.02);
-    box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3);
+  background-color: #2c3e50 !important;
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3);
 }
 
-.alert { 
-    opacity: 0; 
-    transition: opacity 0.4s ease-in-out; 
+.alert {
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
 }
-.alert.show { 
-    opacity: 1; 
+.alert.show {
+  opacity: 1;
 }
 
 .btn-ride {
@@ -64,6 +64,9 @@ form label {
   height: 50px;
   font-weight: 500;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .primary {
