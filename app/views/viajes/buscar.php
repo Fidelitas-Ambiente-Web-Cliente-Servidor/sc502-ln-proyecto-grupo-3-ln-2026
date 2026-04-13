@@ -37,7 +37,7 @@
 
             <section class="btnWrapper">
                 <a href="index.php?page=crear_viaje" class="btn-ride primary" id="btnPublicar">Publicar ride</a>
-                <button class="btn-ride secondary">Mis rides</button>
+                <button class="btn-ride secondary" id="btnMisRides">Mis rides</button>
             </section>
         </div>
 
@@ -45,6 +45,53 @@
             <h2>Busca tu Ride</h2>
             <div class="trip-cards mt-3"></div>
         </section>
+
+        <div id="trips-container">
+        </div>
+
+        <div id="tabs-container" class="d-none">
+          <ul class="nav nav-tabs" id="tripsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="passenger-tab" data-bs-toggle="tab" data-bs-target="#passenger-trips" type="button" role="tab" aria-controls="passenger-trips" aria-selected="true">Mis Viajes como Pasajero</button>
+            </li>
+            <li class="nav-item" role="presentation" id="driver-tab-container">
+              <button class="nav-link" id="driver-tab" data-bs-toggle="tab" data-bs-target="#driver-trips" type="button" role="tab" aria-controls="driver-trips" aria-selected="false">Mis Viajes como Conductor</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="tripsTabsContent">
+            <div class="tab-pane fade show active" id="passenger-trips" role="tabpanel" aria-labelledby="passenger-tab">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Destino</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th class="text-center"><i class="bi bi-heart"></i></th>
+                  </tr>
+                </thead>
+                <tbody id="passenger-trips-table">
+                </tbody>
+              </table>
+            </div>
+            <div class="tab-pane fade" id="driver-trips" role="tabpanel" aria-labelledby="driver-tab">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Destino</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Precio</th>
+                    <th>Pasajeros</th>
+                    <th class="text-center"><i class="bi bi-lightning-charge"></i></th>
+                  </tr>
+                </thead>
+                <tbody id="driver-trips-table">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
     </main>
 
     <footer class="bg-dark text-white text-center py-3 mt-auto">
@@ -53,6 +100,7 @@
 
     <script src="public/js/jquery-4.0.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="public/js/utils.js"></script>
     <script src="public/js/home.js"></script>
 </body>
 </html>

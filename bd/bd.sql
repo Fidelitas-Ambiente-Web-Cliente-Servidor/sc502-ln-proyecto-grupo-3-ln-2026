@@ -76,35 +76,50 @@ CREATE TABLE RESERVA (
     FOREIGN KEY (id_estado) REFERENCES ESTADO(id_estado)
 );
 
+CREATE TABLE CALIFICACION (
+    id_calificacion INT AUTO_INCREMENT PRIMARY KEY,
+    id_viaje INT NOT NULL,
+    id_calificador INT NOT NULL,  -- quien califica
+    id_calificado INT NOT NULL,   -- a quien califican
+    tipo ENUM('CONDUCTOR', 'PASAJERO') NOT NULL,
+    puntuacion INT NOT NULL CHECK (puntuacion BETWEEN 1 AND 5),
+    comentario TEXT,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (id_viaje, id_calificador, id_calificado),
+    FOREIGN KEY (id_viaje) REFERENCES VIAJE(id_viaje) ON DELETE CASCADE,
+    FOREIGN KEY (id_calificador) REFERENCES USUARIO(id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_calificado) REFERENCES USUARIO(id_usuario) ON DELETE CASCADE
+);
+
 -- Opcional: Datos básicos para probar luego
 INSERT INTO ROL (nombre_rol) VALUES ('Conductor'), ('Pasajero'), ('Administrador');
 INSERT INTO ESTADO (nombre_estado) VALUES ('Activo'), ('Completado'), ('Cancelado'), ('Pendiente');
 
---Insertamos un usuario de prueba forzando el ID 1
+-- Insertamos un usuario de prueba forzando el ID 1
 INSERT INTO USUARIO (id_usuario, nombre, apellidos, correo, contrasena, telefono) 
 VALUES (1, 'Conductor', 'De Prueba', 'conductor@rideshare.com', 'password', '8888-8888');
 
---Le asignamos el rol de Conductor (ID 1 en tu tabla ROL)
+-- Le asignamos el rol de Conductor (ID 1 en tu tabla ROL)
 INSERT INTO USUARIO_ROL (id_usuario, id_rol) 
 VALUES (1, 1);
 
 
---1.Insertamos algunas ubicaciones de prueba
+-- 1.Insertamos algunas ubicaciones de prueba
 INSERT INTO UBICACION (provincia, canton, distrito, detalle) VALUES
 ('-', '-', '-', 'San José, Sabana Sur'),
 ('-', '-', '-', 'Heredia, Universidad Nacional'),
 ('-', '-', '-', 'Alajuela, City Mall'),
 ('-', '-', '-', 'Cartago, TEC');
 
---2.Insertamos viajes simulando que el conductor es el usuario 1
---Las fechas deben ser futuras a abril 2026 para que pasen las validaciones
+-- 2.Insertamos viajes simulando que el conductor es el usuario 1
+-- Las fechas deben ser futuras a abril 2026 para que pasen las validaciones
 INSERT INTO VIAJE (id_conductor, id_origen, id_destino, id_estado_viaje, fecha_viaje, hora_salida, precio, asientos_disponibles, detalle) VALUES
 (1, 1, 2, 1, '2026-04-20', '08:00:00', 1500.00, 3, 'Viaje directo, pongo buena música.'),
 (1, 2, 3, 1, '2026-04-21', '14:30:00', 1200.00, 2, 'Aire acondicionado al máximo.'),
 (1, 4, 1, 1, '2026-04-22', '06:15:00', 2000.00, 4, 'Salgo puntual, no espero a nadie atrasado.');
 
 
---Ver todas las reservas (Quién reservó qué viaje)
+-- Ver todas las reservas (Quién reservó qué viaje)
 SELECT 
     r.id_reserva, 
     u.nombre AS pasajero, 
@@ -119,7 +134,7 @@ JOIN UBICACION ori ON v.id_origen = ori.id_ubicacion
 JOIN UBICACION des ON v.id_destino = des.id_ubicacion
 JOIN ESTADO e ON r.id_estado = e.id_estado;
 
---Ver cómo bajaron los espacios del viaje
+-- Ver cómo bajaron los espacios del viaje
 SELECT 
     v.id_viaje, 
     u.nombre AS conductor, 
@@ -129,7 +144,7 @@ SELECT
 FROM VIAJE v
 JOIN USUARIO u ON v.id_conductor = u.id_usuario;
 
---Ver todos los usuarios registrados y su Rol
+-- Ver todos los usuarios registrados y su Rol
 SELECT 
     u.id_usuario, 
     u.nombre, 
@@ -142,7 +157,7 @@ FROM USUARIO u
 JOIN USUARIO_ROL ur ON u.id_usuario = ur.id_usuario
 JOIN ROL r ON ur.id_rol = r.id_rol;
 
---Resumen General de Viajes
+-- Resumen General de Viajes
 SELECT 
     v.id_viaje, 
     c.nombre AS conductor, 

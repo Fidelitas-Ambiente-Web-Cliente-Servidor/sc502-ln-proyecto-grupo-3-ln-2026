@@ -75,6 +75,7 @@
     </main>
 
     <script src="public/js/jquery-4.0.0.min.js"></script>
+    <script src="public/js/utils.js"></script>
     <script src="public/js/ingreso.js"></script>
 </body>
 </html>

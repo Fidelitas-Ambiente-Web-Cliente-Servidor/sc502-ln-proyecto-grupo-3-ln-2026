@@ -6,55 +6,82 @@ require_once './app/controllers/UserController.php';
 require_once './app/controllers/ViajeController.php';
 
 $page = $_GET['page'] ?? 'main';
+$option = $_REQUEST['option'] ?? null;
 
-//Manejamos las solicitudes GET para listar viajes (si implementamos esa funcionalidad)
+//=========================
+// GET REQUESTS
+//=========================
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (isset($_GET['option']) && $_GET['option'] == 'buscarViajes') {
-        $viajeCtrl = new ViajeController();
-        $viajeCtrl->listar();
+
+    if ($option === 'buscarViajes') {
+        (new ViajeController())->listar();
+        exit;
+    }
+
+    if ($option === 'misRides') {
+        if (!isset($_SESSION['id_usuario'])) {
+            http_response_code(401);
+            echo json_encode(["message" => "No autorizado"]);
+            exit;
+        }
+
+        (new ViajeController())->misRides();
         exit;
     }
 }
 
-//Manejamos las solicitudes POST para Login, Registro y Publicar Viaje
+//=========================
+// POST REQUESTS
+//=========================
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($_POST['option'] == 'login') {
-        $userCtrl = new UserController();
-        $userCtrl->login();
-        exit;
-    }
-    if ($_POST['option'] == 'registrar') {
-        $userCtrl = new UserController();
-        $userCtrl->registrar();
-        exit;
-    }
-    if ($_POST['option'] == 'publicarViaje') {
-        $viajeCtrl = new ViajeController();
-        $viajeCtrl->store();
-        exit;
-    }
-    if ($_POST['option'] == 'reservarViaje') {
-        $viajeCtrl = new ViajeController();
-        $viajeCtrl->reservar();
-        exit;
+
+    switch ($option) {
+        case 'login':
+            (new UserController())->login();
+            exit;
+
+        case 'registrar':
+            (new UserController())->registrar();
+            exit;
+
+        case 'publicarViaje':
+            (new ViajeController())->store();
+            exit;
+
+        case 'reservarViaje':
+            (new ViajeController())->reservar();
+            exit;
+
+        case 'finalizar':
+            (new ViajeController())->finalizar();
+            exit;
+
+        case 'calificar':
+            (new ViajeController())->calificar();
+            exit;
     }
 }
 
-//Renderizamos la vista según el parámetro 'page'
+//=========================
+// VISTAS
+//=========================
 switch ($page) {
     case 'login':
         require './app/views/auth/login.php';
         break;
+
     case 'crear_viaje':
         require './app/views/viajes/crear.php';
         break;
+
     case 'buscar_viaje':
         require './app/views/viajes/buscar.php';
         break;
+
     case 'logout':
-        $userCtrl = new UserController();
-        $userCtrl->logout();
+        (new UserController())->logout();
         break;
+
     default:
         require './app/views/home/main.php';
         break;

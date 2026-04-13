@@ -54,3 +54,27 @@
   gap: 1rem;
   justify-content: center;
 }
+.rating-stars {
+  display: flex;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.rating-star {
+  font-size: 20px;
+  color: #ccc;
+  transition: 0.2s;
+}
+
+.rating-star.active,
+.rating-star.hover {
+  color: #ffc107;
+}
+
+table tr {
+  transition: all 0.3s ease;
+}
+
+.table-success {
+  background-color: rgba(25, 135, 84, 0.1) !important;
+}

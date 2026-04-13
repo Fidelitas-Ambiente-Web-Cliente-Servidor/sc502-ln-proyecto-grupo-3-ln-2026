@@ -77,3 +77,60 @@ form label {
     background-color: #333333;
   }
 }
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 99999;
+}
+
+.toast-item {
+  min-width: 260px;
+  max-width: 320px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+
+  background: #222;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+
+  transform: translateX(120%);
+  opacity: 0;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ANIMACIÓN ENTRADA */
+.toast-item.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* TIPOS */
+.toast-item.success {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+}
+
+.toast-item.error {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+}
+
+.toast-item.info {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+}
+
+.toast-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+}

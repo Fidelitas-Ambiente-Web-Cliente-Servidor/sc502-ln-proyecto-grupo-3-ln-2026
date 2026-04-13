@@ -54,11 +54,12 @@ class ViajeController
         }
     }
 
-    //Función para listar viajes activos
     public function listar()
     {
-        $viajes = $this->model->getAll();
-        //Convertimos el resultado de la base de datos a JSON y lo enviamos
+        $id_usuario = $_SESSION['id_usuario'] ?? null;
+
+        $viajes = $this->model->getAll($id_usuario);
+
         echo json_encode($viajes->fetch_all(MYSQLI_ASSOC));
     }
 
@@ -79,6 +80,65 @@ class ViajeController
             echo json_encode(["response" => "00", "message" => "Reserva exitosa"]);
         } else {
             echo json_encode(["response" => "01", "message" => "Error al intentar reservar en la base de datos."]);
+        }
+    }
+
+    public function misRides()
+    {
+        if (!isset($_SESSION['id_usuario'])) {
+            http_response_code(401);
+            echo json_encode(["message" => "No autorizado"]);
+            return;
+        }
+
+        $id_usuario = $_SESSION['id_usuario'];
+
+        $passenger = $this->model->getPassengerTrips($id_usuario)->fetch_all(MYSQLI_ASSOC);
+        $driver = $this->model->getDriverTrips($id_usuario)->fetch_all(MYSQLI_ASSOC);
+
+        echo json_encode([
+            "passenger" => $passenger,
+            "driver" => $driver
+        ]);
+    }
+
+    public function finalizar()
+    {
+        $id_viaje = $_POST['id_viaje'];
+
+        $ok = $this->model->finalizarViaje($id_viaje);
+
+        echo json_encode([
+            "response" => $ok ? "00" : "01"
+        ]);
+    }
+
+    public function calificar()
+    {
+        if (!isset($_SESSION['id_usuario'])) {
+            echo json_encode(["response" => "01", "message" => "No autenticado"]);
+            return;
+        }
+
+        $id_viaje = $_POST['id_viaje'];
+        $puntuacion = $_POST['puntuacion'];
+        $comentario = $_POST['comentario'];
+        $id_pasajero = $_SESSION['id_usuario'];
+
+        $result = $this->model->calificarConductorSeguro(
+            $id_viaje,
+            $id_pasajero,
+            $puntuacion,
+            $comentario
+        );
+
+        if ($result["ok"]) {
+            echo json_encode(["response" => "00"]);
+        } else {
+            echo json_encode([
+                "response" => "01",
+                "message" => $result["message"]
+            ]);
         }
     }
 }

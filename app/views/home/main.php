@@ -52,6 +52,7 @@
 
     <script src="public/js/jquery-4.0.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="public/js/utils.js"></script>
     <script src="public/js/mainPage.js"></script>
 </body>
 </html>
