@@ -1,4 +1,20 @@
--- 1.Tablas Independientes (Catálogos y Usuarios)
+-- Desactivamos revisiones de llaves foráneas para evitar errores al borrar
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 0. Eliminación de tablas en orden inverso de dependencia
+DROP TABLE IF EXISTS CALIFICACION;
+DROP TABLE IF EXISTS RESERVA;
+DROP TABLE IF EXISTS VIAJE;
+DROP TABLE IF EXISTS VEHICULO;
+DROP TABLE IF EXISTS USUARIO_ROL;
+DROP TABLE IF EXISTS USUARIO;
+DROP TABLE IF EXISTS UBICACION;
+DROP TABLE IF EXISTS ESTADO;
+DROP TABLE IF EXISTS ROL;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- 1. Tablas Independientes (Catálogos y Usuarios)
 CREATE TABLE ROL (
     id_rol INT AUTO_INCREMENT PRIMARY KEY,
     nombre_rol VARCHAR(50) NOT NULL
@@ -46,7 +62,6 @@ CREATE TABLE VEHICULO (
     FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario) ON DELETE CASCADE
 );
 
--- 3.Tabla Principal de Viajes (Depende de Usuarios, Ubicaciones y Estados)
 CREATE TABLE VIAJE (
     id_viaje INT AUTO_INCREMENT PRIMARY KEY,
     id_conductor INT NOT NULL,
@@ -64,7 +79,6 @@ CREATE TABLE VIAJE (
     FOREIGN KEY (id_estado_viaje) REFERENCES ESTADO(id_estado)
 );
 
--- 4.Tabla de Reservas (Depende de Viajes, Usuarios y Estados)
 CREATE TABLE RESERVA (
     id_reserva INT AUTO_INCREMENT PRIMARY KEY,
     id_viaje INT NOT NULL,
@@ -79,8 +93,8 @@ CREATE TABLE RESERVA (
 CREATE TABLE CALIFICACION (
     id_calificacion INT AUTO_INCREMENT PRIMARY KEY,
     id_viaje INT NOT NULL,
-    id_calificador INT NOT NULL,  -- quien califica
-    id_calificado INT NOT NULL,   -- a quien califican
+    id_calificador INT NOT NULL, -- quien califica
+    id_calificado INT NOT NULL, -- a quien califican
     tipo ENUM('CONDUCTOR', 'PASAJERO') NOT NULL,
     puntuacion INT NOT NULL CHECK (puntuacion BETWEEN 1 AND 5),
     comentario TEXT,
@@ -91,84 +105,250 @@ CREATE TABLE CALIFICACION (
     FOREIGN KEY (id_calificado) REFERENCES USUARIO(id_usuario) ON DELETE CASCADE
 );
 
--- Opcional: Datos básicos para probar luego
+-- 3. Inserción de Datos de Prueba (Seed Data)
 INSERT INTO ROL (nombre_rol) VALUES ('Conductor'), ('Pasajero'), ('Administrador');
 INSERT INTO ESTADO (nombre_estado) VALUES ('Activo'), ('Completado'), ('Cancelado'), ('Pendiente');
 
--- Insertamos un usuario de prueba forzando el ID 1
-INSERT INTO USUARIO (id_usuario, nombre, apellidos, correo, contrasena, telefono) 
-VALUES (1, 'Conductor', 'De Prueba', 'conductor@rideshare.com', 'password', '8888-8888');
+-- Usuarios (1 Conductor, 1 Pasajero)
+INSERT INTO USUARIO (id_usuario, nombre, apellidos, correo, contrasena, telefono) VALUES 
+(1, 'Steven', 'Fonseca', 'steven@rideshare.com', '$2y$10$e0MYzXy..falsopasswordhash', '8888-8888'),
+(2, 'Valeria', 'Solis', 'valeria@rideshare.com', '$2y$10$e0MYzXy..falsopasswordhash', '7777-7777');
 
--- Le asignamos el rol de Conductor (ID 1 en tu tabla ROL)
-INSERT INTO USUARIO_ROL (id_usuario, id_rol) 
-VALUES (1, 1);
+INSERT INTO USUARIO_ROL (id_usuario, id_rol) VALUES (1, 1), (2, 2);
 
-
--- 1.Insertamos algunas ubicaciones de prueba
+-- Ubicaciones
 INSERT INTO UBICACION (provincia, canton, distrito, detalle) VALUES
-('-', '-', '-', 'San José, Sabana Sur'),
-('-', '-', '-', 'Heredia, Universidad Nacional'),
-('-', '-', '-', 'Alajuela, City Mall'),
-('-', '-', '-', 'Cartago, TEC');
+('San José', 'Central', 'Mata Redonda', 'Sabana Sur'),
+('Heredia', 'Central', 'Heredia', 'Universidad Nacional'),
+('Alajuela', 'Central', 'Alajuela', 'City Mall'),
+('Cartago', 'Central', 'Occidental', 'TEC');
 
--- 2.Insertamos viajes simulando que el conductor es el usuario 1
+-- Viajes
+INSERT INTO VIAJE (id_conductor, id_origen, id_destino, id_estado_viaje, fecha_viaje, hora_salida, precio, asientos_disponibles, detalle) VALUES
+(1, 1, 2, 1, '2026-04-20', '08:00:00', 1500.00, 3, 'Viaje directo hacia la UNA.'),
+(1, 2, 3, 1, '2026-04-21', '14:30:00', 1200.00, 2, 'Aire acondicionado y espacio para equipaje.');
+
+-- Reservas (Valeria reserva el primer viaje de Steven)
+INSERT INTO RESERVA (id_viaje, id_pasajero, id_estado) VALUES (1, 2, 1);
+
+-- Calificaciones (Valeria califica a Steven como conductor)
+INSERT INTO CALIFICACION (id_viaje, id_calificador, id_calificado, tipo, puntuacion, comentario) VALUES 
+(1, 2, 1, 'CONDUCTOR', 5, 'Excelente conductor, muy puntual.');
+
+-- ==========================================
+-- MÁS DATOS DE PRUEBA (SEED DATA EXTENDIDO)
+-- ==========================================
+
+-- 1. Insertar 3 Ubicaciones nuevas (IDs 5, 6 y 7)
+INSERT INTO UBICACION (provincia, canton, distrito, detalle) VALUES
+('San José', 'Montes de Oca', 'San Pedro', 'Universidad de Costa Rica (UCR)'),
+('Heredia', 'San Pablo', 'San Pablo', 'Paseo de las Flores'),
+('San José', 'Escazú', 'San Rafael', 'Multiplaza Escazú');
+
+-- 2. Insertar 3 Usuarios nuevos (IDs 3, 4 y 5)
+INSERT INTO USUARIO (id_usuario, nombre, apellidos, correo, contrasena, telefono) VALUES 
+(3, 'Carlos', 'Brenes', 'carlos@rideshare.com', '$2y$10$e0MYzXy..falsopasswordhash', '6666-6666'),
+(4, 'María', 'Fernández', 'maria@rideshare.com', '$2y$10$e0MYzXy..falsopasswordhash', '5555-5555'),
+(5, 'Andrés', 'Castro', 'andres@rideshare.com', '$2y$10$e0MYzXy..falsopasswordhash', '4444-4444');
+
+-- Asignar Roles: Carlos es Conductor(1), María es Pasajero(2), Andrés es Ambos(1 y 2)
+INSERT INTO USUARIO_ROL (id_usuario, id_rol) VALUES 
+(3, 1), 
+(4, 2), 
+(5, 1), 
+(5, 2);
+
+-- 3. Insertar 3 Vehículos (Para Steven(1), Carlos(3) y Andrés(5))
+INSERT INTO VEHICULO (id_usuario, marca, modelo, placa, capacidad_pasajeros) VALUES
+(1, 'Toyota', 'Yaris', 'BCK-123', 4),
+(3, 'Hyundai', 'Accent', 'HSD-456', 4),
+(5, 'Suzuki', 'Swift', 'SWM-789', 4);
+
+-- 4. Insertar 3 Viajes nuevos (IDs 3, 4 y 5)
 -- Las fechas deben ser futuras a abril 2026 para que pasen las validaciones
 INSERT INTO VIAJE (id_conductor, id_origen, id_destino, id_estado_viaje, fecha_viaje, hora_salida, precio, asientos_disponibles, detalle) VALUES
-(1, 1, 2, 1, '2026-04-20', '08:00:00', 1500.00, 3, 'Viaje directo, pongo buena música.'),
-(1, 2, 3, 1, '2026-04-21', '14:30:00', 1200.00, 2, 'Aire acondicionado al máximo.'),
-(1, 4, 1, 1, '2026-04-22', '06:15:00', 2000.00, 4, 'Salgo puntual, no espero a nadie atrasado.');
+(3, 5, 6, 1, '2026-05-10', '17:00:00', 1800.00, 3, 'Salgo de la UCR hacia Heredia. Cero paradas.'),
+(1, 4, 1, 1, '2026-05-12', '15:00:00', 2000.00, 4, 'Viaje tranquilo desde el TEC hasta Sabana.'),
+(5, 7, 5, 1, '2026-05-15', '08:00:00', 2500.00, 2, 'Voy de Multiplaza a la UCR, puedo llevar a 2 personas.');
+
+-- 5. Insertar 3 Reservas
+-- María(4) reserva el viaje de Carlos(3)
+-- Andrés(5) reserva el viaje de Steven(1)
+-- Valeria(2) reserva el viaje de Andrés(5)
+INSERT INTO RESERVA (id_viaje, id_pasajero, id_estado) VALUES 
+(3, 4, 1),
+(4, 5, 1),
+(5, 2, 1);
+
+-- Restar manualmente los asientos de esas reservas en la tabla VIAJE (como lo haría tu PHP)
+UPDATE VIAJE SET asientos_disponibles = asientos_disponibles - 1 WHERE id_viaje IN (3, 4, 5);
+
+-- 6. Insertar 3 Calificaciones variadas
+-- María califica a Carlos (Pasajero evalúa a Conductor)
+INSERT INTO CALIFICACION (id_viaje, id_calificador, id_calificado, tipo, puntuacion, comentario) VALUES 
+(3, 4, 3, 'CONDUCTOR', 5, 'Super amable y el carro olía muy bien.');
+
+-- Steven califica a Andrés (Conductor evalúa a Pasajero)
+INSERT INTO CALIFICACION (id_viaje, id_calificador, id_calificado, tipo, puntuacion, comentario) VALUES 
+(4, 1, 5, 'PASAJERO', 4, 'Buen viaje, pero llegó unos 5 minutos tarde al punto de encuentro.');
+
+-- Valeria califica a Andrés (Pasajero evalúa a Conductor)
+INSERT INTO CALIFICACION (id_viaje, id_calificador, id_calificado, tipo, puntuacion, comentario) VALUES 
+(5, 2, 5, 'CONDUCTOR', 5, 'Excelente ruta, evitó todas las presas de la pista.');
 
 
--- Ver todas las reservas (Quién reservó qué viaje)
+
+------Consultas-------
+
+--Ver el promedio de calificación por usuario
 SELECT 
-    r.id_reserva, 
-    u.nombre AS pasajero, 
-    v.fecha_viaje, 
-    ori.detalle AS origen, 
-    des.detalle AS destino, 
-    e.nombre_estado AS estado_reserva
-FROM RESERVA r
-JOIN USUARIO u ON r.id_pasajero = u.id_usuario
-JOIN VIAJE v ON r.id_viaje = v.id_viaje
-JOIN UBICACION ori ON v.id_origen = ori.id_ubicacion
-JOIN UBICACION des ON v.id_destino = des.id_ubicacion
-JOIN ESTADO e ON r.id_estado = e.id_estado;
+    u.nombre, 
+    u.apellidos, 
+    AVG(c.puntuacion) AS promedio_estrellas, 
+    COUNT(c.id_calificacion) AS total_calificaciones
+FROM USUARIO u
+JOIN CALIFICACION c ON u.id_usuario = c.id_calificado
+GROUP BY u.id_usuario;
 
--- Ver cómo bajaron los espacios del viaje
+--Ver el detalle de quién calificó a quién
 SELECT 
-    v.id_viaje, 
-    u.nombre AS conductor, 
-    v.fecha_viaje, 
-    v.hora_salida, 
-    v.asientos_disponibles 
-FROM VIAJE v
-JOIN USUARIO u ON v.id_conductor = u.id_usuario;
+    v.fecha_viaje,
+    orig.detalle AS origen,
+    dest.detalle AS destino,
+    calificador.nombre AS quien_califica,
+    calificado.nombre AS a_quien_califican,
+    c.tipo AS rol_evaluado,
+    c.puntuacion,
+    c.comentario
+FROM CALIFICACION c
+JOIN VIAJE v ON c.id_viaje = v.id_viaje
+JOIN USUARIO calificador ON c.id_calificador = calificador.id_usuario
+JOIN USUARIO calificado ON c.id_calificado = calificado.id_usuario
+JOIN UBICACION orig ON v.id_origen = orig.id_ubicacion
+JOIN UBICACION dest ON v.id_destino = dest.id_ubicacion;
 
--- Ver todos los usuarios registrados y su Rol
+--Auditoría de Usuarios y Roles
 SELECT 
     u.id_usuario, 
     u.nombre, 
     u.apellidos, 
     u.correo, 
-    u.telefono, 
-    r.nombre_rol AS rol_asignado,
+    r.nombre_rol AS rol,
     u.fecha_registro
 FROM USUARIO u
 JOIN USUARIO_ROL ur ON u.id_usuario = ur.id_usuario
-JOIN ROL r ON ur.id_rol = r.id_rol;
+JOIN ROL r ON ur.id_rol = r.id_rol
+ORDER BY u.fecha_registro DESC;
 
--- Resumen General de Viajes
+--Tablero de Viajes Disponibles (Vista del Pasajero)
 SELECT 
     v.id_viaje, 
     c.nombre AS conductor, 
     o.detalle AS origen, 
     d.detalle AS destino, 
     v.fecha_viaje, 
+    v.hora_salida,
     v.precio, 
-    v.asientos_disponibles, 
-    e.nombre_estado
+    v.asientos_disponibles,
+    e.nombre_estado AS estado_del_viaje
 FROM VIAJE v
 JOIN USUARIO c ON v.id_conductor = c.id_usuario
 JOIN UBICACION o ON v.id_origen = o.id_ubicacion
 JOIN UBICACION d ON v.id_destino = d.id_ubicacion
-JOIN ESTADO e ON v.id_estado_viaje = e.id_estado;
+JOIN ESTADO e ON v.id_estado_viaje = e.id_estado
+WHERE v.asientos_disponibles > 0
+ORDER BY v.fecha_viaje ASC;
+
+--Control de Reservas Realizadas
+SELECT 
+    r.id_reserva,
+    pasajero.nombre AS nombre_pasajero,
+    conductor.nombre AS nombre_conductor,
+    v.fecha_viaje,
+    orig.detalle AS punto_salida,
+    dest.detalle AS punto_llegada,
+    r.fecha_reserva
+FROM RESERVA r
+JOIN USUARIO pasajero ON r.id_pasajero = pasajero.id_usuario
+JOIN VIAJE v ON r.id_viaje = v.id_viaje
+JOIN USUARIO conductor ON v.id_conductor = conductor.id_usuario
+JOIN UBICACION orig ON v.id_origen = orig.id_ubicacion
+JOIN UBICACION dest ON v.id_destino = dest.id_ubicacion
+ORDER BY r.fecha_reserva DESC;
+
+--Sistema de Reputación (Promedios)
+SELECT 
+    u.nombre, 
+    u.apellidos, 
+    c.tipo AS rol_evaluado,
+    ROUND(AVG(c.puntuacion), 1) AS promedio_estrellas, 
+    COUNT(c.id_calificacion) AS total_opiniones
+FROM USUARIO u
+JOIN CALIFICACION c ON u.id_usuario = c.id_calificado
+GROUP BY u.id_usuario, c.tipo;
+
+--Inventario de Vehículos por Conductor
+SELECT 
+    u.nombre AS dueño, 
+    u.apellidos,
+    v.marca, 
+    v.modelo, 
+    v.placa, 
+    v.capacidad_pasajeros
+FROM VEHICULO v
+JOIN USUARIO u ON v.id_usuario = u.id_usuario;
+
+--Últimos Comentarios y Feedback
+SELECT 
+    calificador.nombre AS de,
+    calificado.nombre AS para,
+    c.puntuacion AS estrellas,
+    c.comentario,
+    c.fecha AS fecha_comentario
+FROM CALIFICACION c
+JOIN USUARIO calificador ON c.id_calificador = calificador.id_usuario
+JOIN USUARIO calificado ON c.id_calificado = calificado.id_usuario
+ORDER BY c.fecha DESC;
+
+
+
+
+
+--Validación de Registro Exitoso
+SELECT 
+    id_usuario, 
+    nombre, 
+    apellidos, 
+    correo, 
+    telefono, 
+    fecha_registro 
+FROM USUARIO 
+ORDER BY fecha_registro DESC 
+LIMIT 1;
+
+
+-- Validar que la contraseña está protegida (Hash)
+-- Sustituye el correo por el que acabas de registrar
+SELECT 
+    correo, 
+    contrasena AS password_hash_protegido 
+FROM USUARIO 
+WHERE correo = 'Mauricio@gmail.com';
+
+-- Validar los permisos/roles asignados al usuario
+SELECT 
+    u.nombre, 
+    u.correo, 
+    r.nombre_rol AS rol_del_sistema
+FROM USUARIO u
+JOIN USUARIO_ROL ur ON u.id_usuario = ur.id_usuario
+JOIN ROL r ON ur.id_rol = r.id_rol
+WHERE u.correo = 'Mauricio@gmail.com';
+
+-- Validar unicidad de cuenta
+SELECT 
+    correo, 
+    COUNT(*) as coincidencias 
+FROM USUARIO 
+GROUP BY correo 
+HAVING coincidencias > 1; 
