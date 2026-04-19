@@ -141,4 +141,20 @@ class ViajeController
             ]);
         }
     }
+
+    public function verComentarios()
+    {
+        if (!isset($_SESSION['id_usuario'])) {
+            http_response_code(401);
+            echo json_encode(["message" => "No autorizado"]);
+            return;
+        }
+
+        $id_viaje = $_GET['id_viaje'];
+        
+        //Usamos el modelo para traer la info
+        $comentarios = $this->model->getComentariosViaje($id_viaje)->fetch_all(MYSQLI_ASSOC);
+        
+        echo json_encode($comentarios);
+    }
 }

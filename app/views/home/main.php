@@ -12,10 +12,15 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
     
-    <header class="bg-white text-dark py-3 px-4 d-flex flex-row justify-content-between align-items-center shadow-sm z-3 position-relative">
-        <h1><a href="index.php" class="text-dark text-decoration-none fw-bold">RideShare</a></h1>
+    <header class="bg-white text-dark py-3 px-4 d-flex flex-row justify-content-between align-items-center shadow-sm z-3 sticky-top">
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn border-0 p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuLateral" aria-controls="menuLateral">
+                <i class="bi bi-list fs-2"></i>
+            </button>
+            <h1><a href="index.php" class="text-dark text-decoration-none fw-bold">RideShare</a></h1>
+        </div>
         
-        <div class="d-flex align-items-center">
+        <div class="d-none d-md-flex align-items-center">
             <?php if(isset($_SESSION['id_usuario'])): ?>
                 <span class="me-3 fw-bold text-dark">Hola, <?php echo $_SESSION['nombre']; ?></span>
                 <a class="btn btn-outline-dark btn-sm text-decoration-none fw-bold" href="index.php?page=logout">Cerrar Sesión</a>
@@ -24,6 +29,48 @@
             <?php endif; ?>
         </div>
     </header>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
+      <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title fw-bold fs-3" id="menuLateralLabel">RideShare</h5>
+        <button type="button" class="btn-close fs-5" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body d-flex flex-column">
+        
+        <?php if(isset($_SESSION['id_usuario'])): ?>
+            <div class="d-flex align-items-center gap-3 mb-4 p-3 bg-light rounded-3 shadow-sm">
+                <i class="bi bi-person-circle fs-1 text-muted"></i>
+                <div>
+                    <h5 class="mb-0 fw-bold"><?php echo $_SESSION['nombre']; ?></h5>
+                    <a href="#" class="text-decoration-none text-muted" style="font-size: 0.85rem;">Ver cuenta</a>
+                </div>
+            </div>
+        <?php else: ?>
+            <div class="mb-4">
+                <a href="index.php?page=login" class="btn btn-dark w-100 fw-bold py-2 mb-2 rounded-pill">Iniciar sesión</a>
+                <a href="index.php?page=login" class="btn btn-outline-dark w-100 fw-bold py-2 rounded-pill">Regístrate</a>
+            </div>
+        <?php endif; ?>
+
+        <ul class="list-unstyled d-flex flex-column gap-4 fs-5 mt-2">
+            <li><a href="index.php" class="text-dark text-decoration-none fw-bold"><i class="bi bi-house-door me-3 fs-4"></i>Inicio</a></li>
+            <li><a href="index.php?page=buscar_viaje" class="text-dark text-decoration-none fw-bold"><i class="bi bi-search me-3 fs-4"></i>Buscar viajes</a></li>
+            
+            <?php if(isset($_SESSION['id_usuario'])): ?>
+                <li><a href="index.php?page=crear_viaje" class="text-dark text-decoration-none fw-bold"><i class="bi bi-plus-circle me-3 fs-4"></i>Publicar un ride</a></li>
+                <li><a href="index.php?page=buscar_viaje" class="text-dark text-decoration-none fw-bold"><i class="bi bi-car-front me-3 fs-4"></i>Mis viajes</a></li>
+            <?php endif; ?>
+            
+            <li><a href="#" class="text-dark text-decoration-none fw-bold"><i class="bi bi-question-circle me-3 fs-4"></i>Ayuda</a></li>
+        </ul>
+
+        <?php if(isset($_SESSION['id_usuario'])): ?>
+            <div class="mt-auto pt-3 border-top">
+                <a href="index.php?page=logout" class="btn btn-light w-100 text-start fw-bold text-danger py-2"><i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión</a>
+            </div>
+        <?php endif; ?>
+      </div>
+    </div>
 
     <main class="flex-grow-1">
         <section class="position-relative w-100 d-flex justify-content-center align-items-center" style="height: 60vh; overflow: hidden;">

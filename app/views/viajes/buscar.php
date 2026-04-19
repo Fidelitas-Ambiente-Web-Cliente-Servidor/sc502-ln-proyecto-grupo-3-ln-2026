@@ -92,6 +92,19 @@
           </div>
         </div>
 
+        <div class="modal fade" id="commentsModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg">
+              <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold"><i class="bi bi-chat-quote me-2"></i>Feedback de los pasajeros</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="commentsModalBody">
+                </div>
+            </div>
+          </div>
+        </div>
+
     </main>
 
     <footer class="bg-dark text-white text-center py-3 mt-auto">

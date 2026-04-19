@@ -163,10 +163,10 @@ class Viaje
                 v.hora_salida,
                 v.precio,
                 v.id_estado_viaje,
-
-                (SELECT COUNT(*) 
-                 FROM RESERVA r 
-                 WHERE r.id_viaje = v.id_viaje) as pasajeros
+                (SELECT COUNT(*) FROM RESERVA r WHERE r.id_viaje = v.id_viaje) as pasajeros,
+                
+                /* NUEVO: Traemos el promedio de calificación recibida */
+                (SELECT AVG(puntuacion) FROM CALIFICACION c WHERE c.id_viaje = v.id_viaje AND c.id_calificado = v.id_conductor) as rating_recibido
 
             FROM VIAJE v
             JOIN UBICACION d ON v.id_destino = d.id_ubicacion
@@ -251,4 +251,28 @@ class Viaje
 
         return ["ok" => false, "message" => "Error al guardar calificación"];
     }
+
+    // =========================
+    // OBTENER COMENTARIOS DE UN VIAJE
+    // =========================
+    public function getComentariosViaje($id_viaje)
+    {
+        $sql = "
+            SELECT 
+                c.puntuacion, 
+                c.comentario, 
+                u.nombre as pasajero 
+            FROM CALIFICACION c 
+            JOIN USUARIO u ON c.id_calificador = u.id_usuario 
+            WHERE c.id_viaje = ? AND c.tipo = 'CONDUCTOR'
+            ORDER BY c.fecha DESC
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id_viaje);
+        $stmt->execute();
+
+        return $stmt->get_result();
+    }
+
 }

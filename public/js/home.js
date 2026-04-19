@@ -42,7 +42,7 @@ btn.on("click", function () {
     });
   };
 
-  const renderPassenger = (trips) => {
+const renderPassenger = (trips) => {
     const table = $("#passenger-trips-table");
     table.html("");
 
@@ -50,60 +50,37 @@ btn.on("click", function () {
       let ratingHTML = "";
 
       if (trip.id_estado_viaje != 2) {
-        ratingHTML = `<span class="text-warning">Viaje en curso</span>`;
-      } else if (trip.ya_calificado) {
+        ratingHTML = `<span class="text-warning fw-bold">Viaje en curso</span>`;
+      } else if (trip.mi_rating) { 
+        // AQUI ESTÁ EL FIX: Usamos el nombre correcto 'mi_rating' que viene de SQL
         ratingHTML = `
           <div class="d-flex justify-content-center">
-            ${[1, 2, 3, 4, 5]
-              .map(
-                (n) => `
-                <i class="bi ${
-                  n <= trip.mi_calificacion
-                    ? "bi-star-fill text-warning"
-                    : "bi-star text-muted"
-                }"></i>
-              `,
-              )
-              .join("")}
+            ${[1, 2, 3, 4, 5].map(n => `
+                <i class="bi ${n <= trip.mi_rating ? "bi-star-fill text-warning" : "bi-star text-muted"}"></i>
+              `).join("")}
           </div>
         `;
       } else {
         ratingHTML = `
           <div class="rating-container d-flex flex-column align-items-center" data-viaje="${trip.id_viaje}">
-            
             <div class="rating-stars">
-              ${[1, 2, 3, 4, 5]
-                .map(
-                  (n) => `
-                  <i class="bi bi-star rating-star" data-value="${n}"></i>
-                `,
-                )
-                .join("")}
+              ${[1, 2, 3, 4, 5].map(n => `<i class="bi bi-star rating-star" data-value="${n}"></i>`).join("")}
             </div>
-
             <div class="rating-form d-none mt-2 w-100">
-              <textarea 
-                class="form-control rating-comment" 
-                placeholder="¿Cómo fue el viaje?"
-                rows="2"></textarea>
-
-              <button class="btn-ride primary mt-2 w-100 btn-send-rating">
-                Enviar
-              </button>
+              <textarea class="form-control rating-comment" placeholder="¿Cómo fue el viaje?" rows="2"></textarea>
+              <button class="btn-ride primary mt-2 w-100 btn-send-rating">Enviar</button>
             </div>
-
           </div>
         `;
       }
 
+      // Agregamos 'align-middle' a los td para que no se descuadre la tabla
       table.append(`
         <tr>
-          <td>${trip.destino}</td>
-          <td>${trip.fecha_viaje}</td>
-          <td>${trip.hora_salida}</td>
-          <td class="text-center">
-            ${ratingHTML}
-          </td>
+          <td class="align-middle">${trip.destino}</td>
+          <td class="align-middle">${trip.fecha_viaje}</td>
+          <td class="align-middle">${trip.hora_salida}</td>
+          <td class="align-middle text-center">${ratingHTML}</td>
         </tr>
       `);
     });
@@ -166,25 +143,19 @@ btn.on("click", function () {
         try {
           const data = JSON.parse(res);
 
-          if (data.ok) {
+        if (data.ok || data.response === "00") {
+            Toast.show("Calificación enviada", "success");
             container.html(`
               <div class="d-flex justify-content-center">
-                ${[1, 2, 3, 4, 5]
-                  .map(
-                    (n) => `
-                    <i class="bi ${
-                      n <= puntuacion
-                        ? "bi-star-fill text-warning"
-                        : "bi-star text-muted"
-                    }"></i>
-                  `,
-                  )
-                  .join("")}
+                ${[1, 2, 3, 4, 5].map(n => `
+                    <i class="bi ${n <= puntuacion ? "bi-star-fill text-warning" : "bi-star text-muted"}"></i>
+                  `).join("")}
               </div>
             `);
-          } else {
-            Toast.show(data.message, "error");
-          }
+        } else {
+            // Si data.message no existe, mostramos un error genérico
+            Toast.show(data.message || "Error al procesar la calificación", "error");
+        }
         } catch {
           Toast.show("Error inesperado", "error");
         }
@@ -192,7 +163,7 @@ btn.on("click", function () {
     );
   });
 
-  const renderDriver = (trips) => {
+    const renderDriver = (trips) => {
     const table = $("#driver-trips-table");
     const driverSection = $("#driver-trips-section");
 
@@ -200,13 +171,7 @@ btn.on("click", function () {
 
     if (!trips || trips.length === 0) {
       driverSection.removeClass("d-none");
-      table.html(`
-      <tr>
-        <td colspan="6" class="text-muted text-center">
-          No tienes viajes como conductor
-        </td>
-      </tr>
-    `);
+      table.html(`<tr><td colspan="6" class="text-muted text-center">No tienes viajes publicados</td></tr>`);
       return;
     }
 
@@ -216,25 +181,34 @@ btn.on("click", function () {
       let actionHTML = "";
 
       if (trip.id_estado_viaje == 2) {
-        actionHTML = `
-        <span class="badge bg-success">Finalizado</span>
-      `;
+        //Si el viaje está finalizado, verificamos si ya nos calificaron
+          if (trip.rating_recibido) {
+            const estrellas = Math.round(trip.rating_recibido);
+            actionHTML = `
+              <div class="d-flex flex-column align-items-center">
+                <span class="badge bg-success mb-1">Finalizado</span>
+                <div class="d-flex text-warning mb-1" style="font-size: 0.8rem;">
+                  ${[1, 2, 3, 4, 5].map(n => `<i class="bi ${n <= estrellas ? "bi-star-fill" : "bi-star text-muted"}"></i>`).join("")}
+                </div>
+                <button class="btn btn-outline-dark btn-sm rounded-pill btn-ver-comentarios" data-id="${trip.id_viaje}" style="font-size: 0.7rem; padding: 2px 10px;">
+                  Leer comentarios
+                </button>
+              </div>`;
+        } else {
+            actionHTML = `<span class="badge bg-success">Finalizado</span><br><small class="text-muted" style="font-size:0.7rem;">Sin calificar</small>`;
+        }
       } else {
-        actionHTML = `
-        <button class="btn-ride primary btn-end" data-id="${trip.id_viaje}">
-          Finalizar
-        </button>
-      `;
+        actionHTML = `<button class="btn-ride primary btn-end btn-sm" data-id="${trip.id_viaje}">Finalizar</button>`;
       }
 
       table.append(`
       <tr>
-        <td>${trip.destino}</td>
-        <td>${trip.fecha_viaje}</td>
-        <td>${trip.hora_salida}</td>
-        <td>₡${trip.precio}</td>
-        <td>${trip.pasajeros}</td>
-        <td class="d-flex justify-content-center align-items-center">
+        <td class="align-middle">${trip.destino}</td>
+        <td class="align-middle">${trip.fecha_viaje}</td>
+        <td class="align-middle">${trip.hora_salida}</td>
+        <td class="align-middle">₡${trip.precio}</td>
+        <td class="align-middle text-center">${trip.pasajeros}</td>
+        <td class="align-middle text-center">
           ${actionHTML}
         </td>
       </tr>
@@ -277,6 +251,61 @@ btn.on("click", function () {
       },
     );
   });
+
+  // ==========================================
+  // VER COMENTARIOS DEL VIAJE (CONDUCTOR)
+  // ==========================================
+  $(document).on("click", ".btn-ver-comentarios", function () {
+    const idViaje = $(this).data("id");
+    const modalBody = $("#commentsModalBody");
+    
+    //Mostramos el modal de Bootstrap
+    const modal = new bootstrap.Modal(document.getElementById('commentsModal'));
+    modal.show();
+    
+    modalBody.html('<div class="text-center text-muted my-4"><div class="spinner-border spinner-border-sm me-2"></div>Cargando...</div>');
+
+    //Pedimos los comentarios a PHP
+    $.get(urlBase + "?option=verComentarios&id_viaje=" + idViaje, function(data) {
+        try {
+            const comentarios = JSON.parse(data);
+            
+            if (comentarios.length === 0) {
+                modalBody.html('<p class="text-muted text-center my-4">Los pasajeros dejaron estrellas, pero no escribieron texto.</p>');
+                return;
+            }
+            
+            let html = '<ul class="list-group list-group-flush">';
+            let comentariosValidos = 0;
+
+            comentarios.forEach(c => {
+                //Solo mostramos si realmente escribieron algo
+                if(c.comentario && c.comentario.trim() !== '') {
+                    comentariosValidos++;
+                    html += `
+                    <li class="list-group-item px-0 py-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong class="text-dark"><i class="bi bi-person-circle me-2 text-muted"></i>${c.pasajero}</strong>
+                            <span class="text-warning fw-bold"><i class="bi bi-star-fill"></i> ${c.puntuacion}</span>
+                        </div>
+                        <p class="mb-0 text-muted" style="font-size: 0.95rem;">"${c.comentario}"</p>
+                    </li>`;
+                }
+            });
+            html += '</ul>';
+            
+            if(comentariosValidos === 0) {
+                 modalBody.html('<p class="text-muted text-center my-4">Los pasajeros dejaron estrellas, pero no escribieron texto.</p>');
+            } else {
+                 modalBody.html(html);
+            }
+            
+        } catch(e) {
+            modalBody.html('<div class="alert alert-danger my-3">Error al cargar los comentarios del servidor.</div>');
+        }
+    });
+  });
+
 
   // ==========================================
   // CARDS

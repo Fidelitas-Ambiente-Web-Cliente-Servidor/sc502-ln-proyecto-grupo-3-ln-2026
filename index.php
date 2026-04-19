@@ -28,6 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         (new ViajeController())->misRides();
         exit;
     }
+
+    if ($option === 'verComentarios') {
+        (new ViajeController())->verComentarios();
+        exit;
+    }
 }
 
 //=========================
