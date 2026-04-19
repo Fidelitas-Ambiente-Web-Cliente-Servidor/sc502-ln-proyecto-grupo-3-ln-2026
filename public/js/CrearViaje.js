@@ -123,12 +123,18 @@ $(document).ready(function () {
           //Esto se ejecuta cuando PHP nos responde
           const respuesta = JSON.parse(data);
 
+          //Busca el bloque del success dentro del $.post de publicarViaje:
           if (respuesta.response === "00") {
-            mostrarAlerta(
-              "¡Viaje publicado con éxito en la base de datos!",
-              "success",
-            );
-            form[0].reset(); //Limpia el formulario
+              mostrarAlerta(
+                  "¡Viaje publicado con éxito! Redirigiendo...",
+                  "success"
+              );
+              form[0].reset(); 
+
+              // Pequeña pausa de 2 segundos para que el usuario lea el mensaje
+              setTimeout(() => {
+                  window.location.href = 'index.php?page=buscar_viaje';
+              }, 2000);
           } else {
             mostrarAlerta(
               "Hubo un error al guardar: " + respuesta.message,

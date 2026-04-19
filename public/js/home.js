@@ -7,18 +7,24 @@ $(document).ready(function () {
 
   let loadedMyRides = false;
 
-  btn.on("click", function () {
+btn.on("click", function () {
     tripsSection.toggleClass("d-none");
     tabsContainer.toggleClass("d-none");
-    const wasHidden = tripsSection.hasClass("d-none");
+    const isShowingMyRides = tripsSection.hasClass("d-none");
 
-    if (!loadedMyRides) {
-      loadMyRides();
-      loadedMyRides = true;
+    if (isShowingMyRides) {
+        //Si entramos a "Mis Rides", cargamos los datos del usuario
+        if (!loadedMyRides) {
+            loadMyRides();
+            loadedMyRides = true;
+        }
+        btn.text("Buscar Rides");
+    } else {
+        //Si volvemos a "Buscar", refrescamos la lista pública de viajes
+        loadTrips($("#zone").val()); 
+        btn.text("Mis Rides");
     }
-
-    btn.text(wasHidden ? "Buscar Rides" : "Mis Rides");
-  });
+});
 
   const loadMyRides = () => {
     $.ajax({
