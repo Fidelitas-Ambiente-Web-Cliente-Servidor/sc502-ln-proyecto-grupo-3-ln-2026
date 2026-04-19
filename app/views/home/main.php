@@ -58,7 +58,7 @@
             
             <?php if(isset($_SESSION['id_usuario'])): ?>
                 <li><a href="index.php?page=crear_viaje" class="text-dark text-decoration-none fw-bold"><i class="bi bi-plus-circle me-3 fs-4"></i>Publicar un ride</a></li>
-                <li><a href="index.php?page=buscar_viaje" class="text-dark text-decoration-none fw-bold"><i class="bi bi-car-front me-3 fs-4"></i>Mis viajes</a></li>
+                <li><a href="index.php?page=buscar_viaje&view=mis_rides" class="text-dark text-decoration-none fw-bold"><i class="bi bi-car-front me-3 fs-4"></i>Mis viajes</a></li>
             <?php endif; ?>
             
             <li><a href="#" class="text-dark text-decoration-none fw-bold"><i class="bi bi-question-circle me-3 fs-4"></i>Ayuda</a></li>

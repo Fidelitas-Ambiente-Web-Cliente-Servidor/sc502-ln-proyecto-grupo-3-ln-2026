@@ -375,8 +375,14 @@ const renderPassenger = (trips) => {
   const urlParams = new URLSearchParams(window.location.search);
   const initialZone = urlParams.get("zone") || "";
 
-  if (initialZone) {
+  if (initialZone) {  
     $("#zone").val(initialZone);
+  }
+
+  //Revisa si venimos desde el enlace directo de "Mis Viajes"
+  const initialView = urlParams.get("view");
+  if (initialView === "mis_rides") {
+    $("#btnMisRides").trigger("click"); //Simulamos el clic automáticamente
   }
 
   loadTrips(initialZone);
