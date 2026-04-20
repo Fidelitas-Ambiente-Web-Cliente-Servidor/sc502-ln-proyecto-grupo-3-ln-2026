@@ -24,21 +24,46 @@
           </header>
 
     <main class="container my-5 flex-grow">
-        <div class="wrapper">
-            <form id="filterForm" class="filter">
-                <div>
-                    <label for="zone" class="form-label">Zona de destino</label>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-geo-alt"></i></span>
-                        <input type="text" class="form-control" placeholder="Ej: Heredia, San Pedro..." id="zone" />
+        <div class="container">
+            <div class="row g-3 align-items-end">
+
+                <!-- INPUT -->
+                <div class="col-12 col-md-6">
+                    <form id="filterForm">
+                        <label for="zone" class="form-label">Zona de destino</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-geo-alt"></i>
+                            </span>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                placeholder="Ej: Heredia, San Pedro..." 
+                                id="zone" 
+                            />
+                        </div>
+                    </form>
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="col-12 col-md-6">
+                    <div class="d-flex flex-column flex-md-row gap-2">
+
+                        <a href="index.php?page=crear_viaje" 
+                          class="btn-ride primary w-100 text-center">
+                            Publicar ride
+                        </a>
+
+                        <button 
+                            class="btn-ride secondary w-100" 
+                            id="btnMisRides">
+                            Mis rides
+                        </button>
+
                     </div>
                 </div>
-            </form>
 
-            <section class="btnWrapper">
-                <a href="index.php?page=crear_viaje" class="btn-ride primary" id="btnPublicar">Publicar ride</a>
-                <button class="btn-ride secondary" id="btnMisRides">Mis rides</button>
-            </section>
+            </div>
         </div>
 
         <section id="trips" class="mt-4">
@@ -49,48 +74,79 @@
         <div id="trips-container">
         </div>
 
-        <div id="tabs-container" class="d-none">
-          <ul class="nav nav-tabs" id="tripsTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="passenger-tab" data-bs-toggle="tab" data-bs-target="#passenger-trips" type="button" role="tab" aria-controls="passenger-trips" aria-selected="true">Mis Viajes como Pasajero</button>
-            </li>
-            <li class="nav-item" role="presentation" id="driver-tab-container">
-              <button class="nav-link" id="driver-tab" data-bs-toggle="tab" data-bs-target="#driver-trips" type="button" role="tab" aria-controls="driver-trips" aria-selected="false">Mis Viajes como Conductor</button>
-            </li>
+        <div id="tabs-container" class="d-none mt-4">
+
+          <!-- TABS -->
+          <ul class="nav nav-tabs flex-nowrap overflow-auto" role="tablist" style="white-space: nowrap;">
+              
+              <li class="nav-item">
+                  <button 
+                      class="nav-link active" 
+                      id="passenger-tab"
+                      data-bs-toggle="tab" 
+                      data-bs-target="#passenger-trips">
+                      Pasajero
+                  </button>
+              </li>
+
+              <li class="nav-item" id="driver-tab-container">
+                  <button 
+                      class="nav-link" 
+                      id="driver-tab"
+                      data-bs-toggle="tab" 
+                      data-bs-target="#driver-trips">
+                      Conductor
+                  </button>
+              </li>
+
           </ul>
-          <div class="tab-content" id="tripsTabsContent">
-            <div class="tab-pane fade show active" id="passenger-trips" role="tabpanel" aria-labelledby="passenger-tab">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Destino</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th class="text-center"><i class="bi bi-heart"></i></th>
-                  </tr>
-                </thead>
-                <tbody id="passenger-trips-table">
-                </tbody>
-              </table>
-            </div>
-            <div class="tab-pane fade" id="driver-trips" role="tabpanel" aria-labelledby="driver-tab">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Destino</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Precio</th>
-                    <th>Pasajeros</th>
-                    <th class="text-center"><i class="bi bi-lightning-charge"></i></th>
-                  </tr>
-                </thead>
-                <tbody id="driver-trips-table">
-                </tbody>
-              </table>
-            </div>
+
+          <!-- CONTENT -->
+          <div class="tab-content mt-3">
+
+              <!-- PASSENGER -->
+              <div class="tab-pane fade show active" id="passenger-trips">
+
+                  <div class="table-responsive">
+                      <table class="table table-sm align-middle">
+                          <thead class="small">
+                              <tr>
+                                  <th>Destino</th>
+                                  <th>Fecha</th>
+                                  <th>Hora</th>
+                                  <th class="text-center"><i class="bi bi-heart"></i></th>
+                              </tr>
+                          </thead>
+                          <tbody id="passenger-trips-table"></tbody>
+                      </table>
+                  </div>
+
+              </div>
+
+              <!-- DRIVER -->
+              <div class="tab-pane fade" id="driver-trips">
+
+                  <div class="table-responsive">
+                      <table class="table table-sm align-middle">
+                          <thead class="small">
+                              <tr>
+                                  <th>Destino</th>
+                                  <th>Fecha</th>
+                                  <th>Hora</th>
+                                  <th>Precio</th>
+                                  <th>Pasajeros</th>
+                                  <th class="text-center"><i class="bi bi-lightning-charge"></i></th>
+                              </tr>
+                          </thead>
+                          <tbody id="driver-trips-table"></tbody>
+                      </table>
+                  </div>
+
+              </div>
+
           </div>
-        </div>
+
+      </div>
 
         <div class="modal fade" id="commentsModal" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
