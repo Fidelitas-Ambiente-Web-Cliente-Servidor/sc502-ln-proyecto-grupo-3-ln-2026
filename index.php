@@ -49,6 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             (new UserController())->registrar();
             exit;
 
+        case 'recuperar':
+            (new UserController())->recuperar();
+            exit;
+
         case 'publicarViaje':
             (new ViajeController())->store();
             exit;

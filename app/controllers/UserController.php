@@ -62,6 +62,25 @@ class UserController
         }
     }
 
+    public function recuperar() {
+        $correo = $_POST['correo'] ?? '';
+        $telefono = $_POST['telefono'] ?? '';
+        $nueva_contrasena = $_POST['nueva_contrasena'] ?? '';
+
+        if(empty($correo) || empty($telefono) || empty($nueva_contrasena)) {
+            echo json_encode(["response" => "01", "message" => "Todos los campos son obligatorios."]);
+            return;
+        }
+
+        $resultado = $this->model->actualizarContrasena($correo, $telefono, $nueva_contrasena);
+
+        if ($resultado['ok']) {
+            echo json_encode(["response" => "00", "message" => "¡Contraseña actualizada con éxito! Ya puedes iniciar sesión."]);
+        } else {
+            echo json_encode(["response" => "01", "message" => $resultado['message']]);
+        }
+    }
+
     public function logout()
     {
         session_destroy();

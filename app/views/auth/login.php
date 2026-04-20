@@ -44,6 +44,9 @@
                 <div class="col-12 text-center mt-4">
                     <button type="submit" class="btn-ride primary w-50">Iniciar Sesión</button>
                 </div>
+                <div class="col-12 text-center mt-3">
+                    <a href="#" id="forgot-password-link" class="text-muted text-decoration-none small">¿Olvidaste tu contraseña?</a>
+                </div>
             </form>
 
             <form id="signupForm" class="email-signup row g-3" style="display: none;">
@@ -69,6 +72,28 @@
                 </div>
                 <div class="col-12 text-center mt-4">
                     <button type="submit" class="btn-ride primary w-50">Crear cuenta</button>
+                </div>
+            </form>
+            <form id="recoverForm" class="row g-3" style="display: none;">
+                <h4 class="text-center mb-2 fw-bold mt-2">Recuperar Contraseña</h4>
+                <p class="text-muted text-center small mb-3">Ingresa tu correo y el teléfono registrado para validar tu identidad.</p>
+                
+                <div class="col-12">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email" id="rec_correo" class="form-control" placeholder="correo@ejemplo.com" required />
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Teléfono registrado</label>
+                    <input type="text" id="rec_telefono" class="form-control" placeholder="Ej: 8888-8888" required />
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Nueva Contraseña</label>
+                    <input type="password" id="rec_password" class="form-control" placeholder="********" required />
+                </div>
+                <div class="col-12 text-center mt-4">
+                    <button type="submit" class="btn-ride primary w-75 mb-3">Actualizar Contraseña</button>
+                    <br>
+                    <a href="#" id="back-to-login-link" class="text-muted text-decoration-none small">Volver al inicio de sesión</a>
                 </div>
             </form>
         </section>

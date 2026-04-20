@@ -42,4 +42,32 @@ class User
         }
         return false;
     }
+
+    // =========================
+    // RECUPERAR CONTRASEÑA
+    // =========================
+    public function actualizarContrasena($correo, $telefono, $nueva_contrasena) {
+        // 1. Verificamos si existe un usuario que coincida EXACTAMENTE con ese correo y teléfono
+        $sql = "SELECT id_usuario FROM USUARIO WHERE correo = ? AND telefono = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $correo, $telefono);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if($result->num_rows === 0) {
+            return ["ok" => false, "message" => "Los datos no coinciden con ninguna cuenta registrada."];
+        }
+
+        // 2. Si coinciden, encriptamos la nueva contraseña y actualizamos
+        $hash = password_hash($nueva_contrasena, PASSWORD_DEFAULT);
+        $sqlUpdate = "UPDATE USUARIO SET contrasena = ? WHERE correo = ?";
+        $stmtUpdate = $this->conn->prepare($sqlUpdate);
+        $stmtUpdate->bind_param("ss", $hash, $correo);
+
+        if($stmtUpdate->execute()) {
+            return ["ok" => true];
+        }
+        
+        return ["ok" => false, "message" => "Ocurrió un error al intentar actualizar la contraseña."];
+    }
 }

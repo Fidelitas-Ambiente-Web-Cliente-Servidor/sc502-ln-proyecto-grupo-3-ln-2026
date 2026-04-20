@@ -75,6 +75,60 @@ $(document).ready(function () {
         });
     });
 
+    // ==========================================
+    // LÓGICA DE RECUPERAR CONTRASEÑA
+    // ==========================================
+
+    // Mostrar formulario de recuperación
+    $("#forgot-password-link").on("click", function(e) {
+        e.preventDefault();
+        loginForm.hide();
+        signupForm.hide();
+        $(".d-flex.justify-content-center.mb-4").hide(); // Oculta las pestañas
+        authMessages.html("");
+        $("#recoverForm").fadeIn();
+    });
+
+    // Volver al login
+    $("#back-to-login-link").on("click", function(e) {
+        e.preventDefault();
+        $("#recoverForm").hide();
+        $(".d-flex.justify-content-center.mb-4").show(); // Muestra las pestañas
+        loginLink.trigger("click");
+        authMessages.html("");
+    });
+
+    // Enviar datos al servidor
+    $("#recoverForm").on("submit", function(e) {
+        e.preventDefault();
+        
+        mostrarAlerta("Validando datos...", "info");
+
+        $.post(urlBase, {
+            option: "recuperar",
+            correo: $("#rec_correo").val().trim(),
+            telefono: $("#rec_telefono").val().trim(),
+            nueva_contrasena: $("#rec_password").val()
+        }, function(res) {
+            try {
+                const data = JSON.parse(res);
+                if(data.response === "00") {
+                    mostrarAlerta(data.message, "success");
+                    $("#recoverForm")[0].reset();
+                    
+                    // Volver al login después de 3 segundos
+                    setTimeout(() => {
+                        $("#back-to-login-link").trigger("click");
+                    }, 3000);
+                } else {
+                    mostrarAlerta(data.message, "danger");
+                }
+            } catch(error) {
+                mostrarAlerta("Error al procesar la solicitud.", "danger");
+            }
+        });
+    });
+
     //Función auxiliar para renderizar alertas
     function mostrarAlerta(mensaje, tipo) {
         authMessages.html(`
